@@ -116,6 +116,7 @@
 				$('#waste_bin_status').html("Scanning..");
 				$('#reader').html5_qrcode(function(data){
 				 		 // do something when code is read
+				 		 alert('Scan successful!');
 				 		 $.post( 
 				 		 		"{% url 'mqtt-ajax' %}",
 				 		 		{ 
