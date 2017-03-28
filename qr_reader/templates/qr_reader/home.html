@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Smart Waste Management</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link src="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.9.2/jquery-ui.min.js" integrity="sha256-eEa1kEtgK9ZL6h60VXwDsJ2rxYCwfxi40VZ9E0XwoEA=" crossorigin="anonymous"></script>
+  <style type="text/css">
+	
+	#trash {
+	    position:absolute;
+	    bottom:0;
+	    right:0;
+	    width:128px;
+	    height:128px;
+	}
+	#paper {
+	    position:absolute;
+	    top:0;
+	    left:0;
+	    width:60px;
+	    height:60px;
+	    z-index:1;
+	}
+  </style>
+</head>
+<body>
+
+<div class="jumbotron text-center">
+  <h1>Smart Waste Management</h1>
+</div>
+  
+<div class="container">
+  <div class="row">
+    <div class="col-sm-2">
+      <h3>Waste Bin Status</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+    </div>
+    <div class="col-sm-8">
+      <h3>Waste Bin</h3>
+      
+      <div id="paper">
+      {% load static %}
+      	<img src="{% static 'qr_reader/img/plastic_package_icon.jpg' %}" alt="Plastic Bottle" />
+      </div>
+      <div id="trash">
+      	<img src="http://www.veryicon.com/icon/png/Object/Nova/Trash.png" />
+      </div>
+    
+    <div class="col-sm-2">
+      <h3>Server Reply</h3>        
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+    </div>
+  </div>
+</div>
+
+</body>
+<script type="text/javascript">
+	$(function() {
+    $("#paper").click(function() {
+        var target = $("#trash").offset();
+        $(this).animate({ top:target.top, left:target.left }, 2000, "easeInQuint", function() {
+            $(this).fadeOut();
+        });
+    });
+});
+</script>
+</html>
