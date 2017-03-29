@@ -17,7 +17,9 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-    url(r'^$', views.read, name="read"),
-    url(r'^ajax/', views.mqtt_ajax, name="mqtt-ajax")
-
+    url(r'^$', views.index, name="index"),
+    url(r'^qr_reader$', views.qr_reader, name="qr_reader"),
+    url(r'^qr_reader_sabin$', views.qr_reader_sabin, name="qr_reader_sabin"),
+    url(r'^ajax$', views.mqtt_ajax, name="mqtt-ajax"),
+    url(r'^test$', views.test, name="test_url")
 ]

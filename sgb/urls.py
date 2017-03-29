@@ -18,6 +18,6 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^qr_reader/', include('qr_reader.urls'),
+    url(r'^', include('qr_reader.urls'),
     )
 ]

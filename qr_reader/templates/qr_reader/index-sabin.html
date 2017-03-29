@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Waste Bin</title>
+    <meta name="description" content="Waste Bin">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Anton|Yanone+Kaffeesatz" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    {% load static %}
+    <script type="text/javascript" src="{% static 'js/jsqrcode-combined.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/html5-qrcode.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'vendor/normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+	
+	<!--[if lte IE 9]>
+        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+    <![endif]-->
+
+    <div class="container">
+        <header>
+            <h1> Waste Management </h1> 
+        </header>
+        <!-- end of header -->
+
+        <aside id="info" class="left">
+            <h2> <i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard </h2>
+            <section class="content-body"> Closed </section>
+        </aside>
+        <!-- end of left aside -->
+
+        <main id="trash" class="center">
+
+        	<div class="trash">
+				<div class="trash-lid">
+					<span class="trash-handle"></span>
+				</div>
+				<div class="trash-body">
+					<span class="trash-line"></span>
+					<span class="trash-line"></span>
+					<span class="trash-line"></span>
+				</div>
+                <button id="qr_scan">Scan</button> <!--on click event of this button qr reader is loaded in #reader div -->
+			</div> 
+			<!-- end of trash can -->
+			<div id="reader">
+                  <!--Qr reader is loaded here -->
+            </div>
+
+        </main>
+		<!-- end of main container -->
+
+        <aside id="log" class="right">
+            <h2> <i class="fa fa-server" aria-hidden="true"></i> Log</h2>
+            <section id="server_response" class="content-body"> No response </section>
+		</aside>
+		<!-- end of right aside -->
+
+		<div class="road"></div>
+		<!-- road -->
+
+        <footer class="waste">
+        	<ul id="wastes" class="clearfix waste-list">
+        		<li data-type="Glass">
+    				<span> <i class="fa fa-glass fa-3x" aria-hidden="true"></i> <br> Glass </span>
+				</li>
+        		<li data-type="Coffee">
+    				<span> <i class="fa fa-coffee fa-3x" aria-hidden="true"></i> <br> Coffee </span>
+        		</li>
+        		<li data-type="Beer">
+    				<span> <i class="fa fa-beer fa-3x" aria-hidden="true"></i> <br> Beer </span>
+        		</li>
+        		<li data-type="Spoon">
+    				<span> <i class="fa fa-cutlery fa-3x" aria-hidden="true"></i> <br> Spoon </span>
+        		</li>
+        		<li data-type="Paper">
+    				<span> <i class="fa fa-book fa-3x" aria-hidden="true"></i> <br> Paper </span>
+        		</li>
+        	</ul>
+        	<h2>Waste Type </h2>
+		</footer>
+		<!-- end of footer -->
+
+    </div>
+    <!-- end of container -->
+
+	<!-- Scripts -->
+
+	<!-- Dragula Plugin -->
+	<script src="{% static 'vendor/dragula.min.js' %}"></script>
+	<link rel="stylesheet" href="{% static 'vendor/dragula.min.css' %}">
+	
+	<script src="{% static 'js/app.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#qr_scan').click(function(){
+                //$('#waste_bin_status').html("Scanning..");
+                $('#reader').html5_qrcode(function(data){
+                         // do something when code is read
+                         alert('Scan successful!');
+                         $.post( 
+                                "{% url 'mqtt-ajax' %}",
+                                { 
+                                    code: data,
+                                    csrfmiddlewaretoken:'{{ csrf_token }}'
+                                 },
+                                function(mqtt_response,status){
+                                    $("#server_response").html(mqtt_response);
+                                });
+
+                         $("#reader").html5_qrcode_stop();
+                         //$('#waste_bin_status').html("Scan complete!");
+                         return;
+                    },
+                    function(error){
+                        //show read errors 
+                        console.log(error);
+                        /*$("#reader").html5_qrcode_stop();*/
+                        //$('#waste_bin_status').html("Scan Error!!!");
+                    }, function(videoError){
+                        //the video stream could be opened
+                        console.log(videoError);
+                        $("#reader").html5_qrcode_stop();
+                        //$('#waste_bin_status').html("Video Error!!");
+                    }
+                );
+            });
+        });
+    </script>
+</body>
+
+</html>
