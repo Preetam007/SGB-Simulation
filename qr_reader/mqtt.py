@@ -1,5 +1,6 @@
 import paho.mqtt.client as mqtt
 from django.http import HttpResponse
+import json
 
 
 PUB_AUTHENTICATE_TOPIC = "SGB/Authenticate"
@@ -18,7 +19,7 @@ def on_connect(client, userdata, rc):
 def on_message(client, userdata, msg):
 	global RESPONSE
 	print("Message received from server!")
-	RESPONSE = msg.payload
+	RESPONSE = json.loads(msg.payload)
 	print(str(msg.payload))
 
 

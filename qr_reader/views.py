@@ -43,7 +43,7 @@ def mqtt_ajax(request):
 	time.sleep(5)
 	client.disconnect()
 	client.loop_stop()
-	return HttpResponse(mqtt_module.RESPONSE)
+	return HttpResponse(mqtt_module.RESPONSE["open"])
 
 
 def test(response):
