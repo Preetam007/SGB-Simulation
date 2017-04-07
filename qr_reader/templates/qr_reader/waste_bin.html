@@ -124,10 +124,13 @@
 				 		 			csrfmiddlewaretoken:'{{ csrf_token }}'
 				 		 		 },
 				 		 		function(mqtt_response,status){
+				 		 			$("#reader").html5_qrcode_stop();
 				 		 			$("#server_response").html(mqtt_response);
+				 		 			if(mqtt_response === "true")
+				 		 				$('#waste_bin_status').html("Open");
 				 		 		});
 
-				 		 $("#reader").html5_qrcode_stop();
+				 		 
 				 		 $('#waste_bin_status').html("Scan complete!");
 				 		 return;
 				 	},
