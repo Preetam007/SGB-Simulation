@@ -99,13 +99,20 @@
 	<script src="{% static 'js/app.js' %}"></script>
     <script type="text/javascript">
         $(document).ready(function(){
+            var qr_data;
+            var sgb_id;
+            $.getJSON("{% static 'data.json' %}",{async : false},function(data){
+                sgb_id = data.sgb_id;
+            });
+            
             $('#qr_scan').click(function(){
                 $('#waste_bin_status').html("Scanning..");
                 $('#reader').html5_qrcode(function(data){
                          // do something when code is read
                          alert('Scan successful!');
+                         qr_data = data;
                          $.post( 
-                                "{% url 'mqtt-ajax' %}",
+                                "{% url 'mqtt-ajax-authenticate' %}",
                                 { 
                                     code: data,
                                     csrfmiddlewaretoken:'{{ csrf_token }}'
@@ -113,11 +120,13 @@
                                 function(mqtt_response,status){
                                     $("#reader").html5_qrcode_stop();
                                     $("#server_response").html(mqtt_response);
-                                    if(mqtt_response === "true")
+                                    //if response is true, open the SGB and activate the send 
+                                    if(mqtt_response === "true"){
                                         $('#waste_bin_status').html("Open");
+                                        $("#send_waste").attr("disabled",false);
+                                    }
                                 });
 
-                         
                          $('#waste_bin_status').html("Scan complete!");
                          return;
                     },
@@ -133,6 +142,21 @@
                         $('#waste_bin_status').html("Video Error!!");
                     }
                 );
+            });
+
+            //sends dummy waste data to server
+            $('#send_waste').click(function(){
+                var waste_info = '{"sgb_id":"'+sgb_id+'","waste_amt":1000,"qr_code":"'+qr_data+'"}';
+                $.post( 
+                        "{% url 'mqtt-ajax-waste' %}",
+                        { 
+                            waste_meta_data: waste_info,
+                            csrfmiddlewaretoken:'{{ csrf_token }}'
+                         },
+                        function(res,status){
+                            $("#server_response").html(res);
+                            console.log(res);
+                        });
             });
         });
     </script>

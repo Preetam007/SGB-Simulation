@@ -6,7 +6,7 @@ import json
 PUB_AUTHENTICATE_TOPIC = "SGB/Authenticate"
 PUB_WASTE_TOPIC = "SGB/Waste"
 SUB_AUTHENTICATE_TOPIC = "SERVER/Authenticate"
-SUB_WASTE_TOPIC = "SERVER/waste"
+SUB_WASTE_TOPIC = "SERVER/Waste"
 
 RESPONSE = "No response"
 

@@ -23,7 +23,7 @@ def qr_reader_sabin(request):
 	# psabin is supposed to edit here
 	return render(request,"qr_reader/index-sabin.html")
 
-def mqtt_ajax(request):
+def mqtt_ajax_authenticate(request):
 	decoded_qr =  request.POST.get("code","error getting code")
 
 	client = mqtt_module.client
@@ -37,13 +37,33 @@ def mqtt_ajax(request):
 	client.loop_start()
 	# publish qr_code to server
 	client.subscribe(mqtt_module.SUB_AUTHENTICATE_TOPIC,0)
-	client.subscribe(mqtt_module.SUB_WASTE_TOPIC,0)
 	client.publish(mqtt_module.PUB_AUTHENTICATE_TOPIC, decoded_qr);
 	#waiting period of to receive a reply
 	time.sleep(5)
 	client.disconnect()
 	client.loop_stop()
 	return HttpResponse(mqtt_module.RESPONSE["open"])
+
+def mqtt_ajax_waste(request):
+	waste_meta_data = request.POST.get("waste_meta_data","error getting code")
+
+	client = mqtt_module.client
+	client.on_connect = mqtt_module.on_connect
+	client.on_subscribe = mqtt_module.on_subscribe
+	client.on_message = mqtt_module.on_message
+	client.on_publish = mqtt_module.on_publish
+	
+	# establish mqtt connection subscribe to message topic from server
+	client.connect(MQTT_HOST, MQTT_PORT, MQTT_KEEPALIVE_INTERVAL)
+	client.loop_start()
+	# publish qr_code to server
+	client.subscribe(mqtt_module.SUB_WASTE_TOPIC,0)
+	client.publish(mqtt_module.PUB_WASTE_TOPIC, waste_meta_data);
+	#waiting period of to receive a reply
+	time.sleep(5)
+	client.disconnect()
+	client.loop_stop()
+	return HttpResponse(mqtt_module.RESPONSE)
 
 
 def test(response):

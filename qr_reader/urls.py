@@ -20,6 +20,7 @@ urlpatterns = [
     url(r'^$', views.index, name="index"),
     url(r'^qr_reader$', views.qr_reader, name="qr_reader"),
     url(r'^qr_reader_sabin$', views.qr_reader_sabin, name="qr_reader_sabin"),
-    url(r'^ajax$', views.mqtt_ajax, name="mqtt-ajax"),
+    url(r'^ajax$', views.mqtt_ajax_authenticate, name="mqtt-ajax-authenticate"),
+    url(r'^waste$', views.mqtt_ajax_waste, name="mqtt-ajax-waste"),
     url(r'^test$', views.test, name="test_url")
 ]
