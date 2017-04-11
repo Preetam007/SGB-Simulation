@@ -1,0 +1,22 @@
+{
+	"rpc_server" : "",
+	"rpc_port" : ,
+	"address" : {
+					"TheBank" : "0xe13bcf5b91dc6c5963fa32b4829643d170d39206", //0x64042b4bbebded191aaa50359d1aba6a42f8c764
+					"Manish" : "0x3622c8a94946f4c38e9094656a83d34cbb9d2d37",
+					"Oleg" : "0x6a359bf3c362bd4d78896da703fdf68e4f1ab5a7",
+					"Andrei" : "0x766c8755b61ab31414a0227910a96ef7133c3647", // has account in bank
+					"Margarita" : "0xa7db9878577f4014e444600c23280f93c46a7a5a", // has account in bank
+					"Shubi": "0xe819677fd54034a27504e0c598af1274691474fe", // has account in bank
+					"com_dao_mem1": "0x4d5c81c2f3c584fb09f0b1dadba567efbd4a4330",
+					"com_dao_mem2": "0x14fed2700022591cfbdf02778e57b52d69db0ea8",
+					"com_dao_mem3": "0xa0c252f7bea1943474d076f402df1205bdb12b07",
+					"SGBFactory" : "0x899835796d820c29b81583fca7967dd01f7056a4", // the comDAO fund is to be sent to this address
+					"ComDAO" : "0xb7fe5d01d33b6405904edde2b58687fae11b664f",
+					"coin_base": "0x85ded4eae096d15de9bee720a6e91eb28603a7e6"
+				},
+	"ABI" : {
+				
+			}
+
+}

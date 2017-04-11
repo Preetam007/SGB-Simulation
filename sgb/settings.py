@@ -32,6 +32,11 @@ ALLOWED_HOSTS = [u'vast-falls-42691.herokuapp.com',u'localhost']
 
 INSTALLED_APPS = [
     'qr_reader',
+    'events',
+    'maps',
+    'recycler',
+    'stats',
+    'collectors',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
