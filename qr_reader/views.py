@@ -16,7 +16,9 @@ def index(request):
 def qr_reader(request):
 	# this loads the view inside templates folder inside this app
 	# but django treats all the templates folder of different apps as one single /templates folder
-	# so it will be wise to namespace them according to the app to remove any possibility of conflict 
+	# so it will be wise to namespace them according to the app to remove any possibility of conflict
+	#(optional) a mqtt request is to be made to the server to get the current_state 
+	# this can be optional as in real world its not relevant to the SGB
 	return render(request,"qr_reader/waste_bin.html")
 
 def qr_reader_sabin(request):
@@ -64,9 +66,5 @@ def mqtt_ajax_waste(request):
 	client.disconnect()
 	client.loop_stop()
 	return HttpResponse(mqtt_module.RESPONSE)
-
-
-def test(response):
-	return HttpResponse("Its working!")
 
 
