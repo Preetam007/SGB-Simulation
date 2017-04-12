@@ -59,10 +59,10 @@
 	    </div>
 	    <div class="collapse navbar-collapse" id="myNavbar">
 	      <ul class="nav navbar-nav">
-	        <li class="active"><a href="#">Home</a></li>
+	        <li><a href="#">Home</a></li>
 	        <li><a href="/recycler">Recycle</a></li>
 	        <li><a href="/collectors">Collectors</a></li>
-	        <li><a href="/stats">Stats</a></li>
+	        <li class="active"><a href="/stats">Stats</a></li>
 	        <li><a href="/maps">Maps</a></li>
 	        <li><a href="/events">Events</a></li>
 	      </ul>
@@ -82,21 +82,30 @@
 	        <p id="waste_bin_status" class="text-danger">Closed</p>
 	      </div>
 	      <div class="well">
-	        <button id="send_waste" class="btn btn-danger" disabled>Send Waste</button>
-	        <br>
-	        <button id="collect_waste" class="btn btn-danger" disabled>Collect Waste</button>
+	        <button id="send_waste" class="btn btn-danger" disabled>Send Waste Data</button>
 	      </div>
 	    </div>
 	    <div class="col-sm-8 text-left">       
 	      <div>
-	      	<h1>Smart Garbage Bin</h1>
+	      	<h1>Accounts in Bank</h1>
 	      </div>
 	      <hr>
 	      <div class="row">
-    		<div class="col" align="center">
-	      		<img src="{% static 'qr_reader/img/Recycle_Bin_Full.png' %}" alt="">
-	      		<br>
-	      		<button type="button" class="btn btn-primary" id="qr_scan">Scan QR</button>
+    		<div class="col">
+	      		<div class="well">
+			        Account : <b>{{ shubi.account }}</b>
+					<br>
+					Balance (ETH) : <b>{{ shubi.ETH }}</b>
+					<br>
+					Balance (Wei) : <b>{{ shubi.wei }}</b>
+			    </div>
+			    <div class="well">
+			        Account : <b>{{ comdao.account }}</b>
+					<br>
+					Balance (ETH) : <b>{{ comdao.ETH }}</b>
+					<br>
+					Balance (Wei) : <b>{{ comdao.wei }}</b>
+			    </div>
     		</div>
 		  </div>
 		  <hr>
@@ -117,72 +126,7 @@
 	    </div>
 	  </div>
 	</div>
-	<script type="text/javascript">
-		$(document).ready(function(){
-			var qr_data;
-			var sgb_id;
-			$.getJSON("{% static 'data.json' %}",{async : false},function(data){
-				sgb_id = data.sgb_id;
-			});
-			
-			$('#qr_scan').click(function(){
-				$('#waste_bin_status').html("Scanning..");
-				$('#reader').html5_qrcode(function(data){
-				 		 // do something when code is read
-				 		 alert('Scan successful!');
-				 		 qr_data = data;
-				 		 $.post( 
-				 		 		"{% url 'mqtt-ajax-authenticate' %}",
-				 		 		{ 
-				 		 			code: data,
-				 		 			csrfmiddlewaretoken:'{{ csrf_token }}'
-				 		 		 },
-				 		 		function(mqtt_response,status){
-				 		 			$("#reader").html5_qrcode_stop();
-				 		 			$("#server_response").html(mqtt_response);
-				 		 			//if response is true, open the SGB and activate the send 
-				 		 			if(mqtt_response === "true"){
-				 		 				$('#waste_bin_status').html("Open");
-				 		 				$("#send_waste").attr("disabled",false);
-				 		 			}
-				 		 		});
-
-				 		 $('#waste_bin_status').html("Scan complete!");
-				 		 return;
-				 	},
-				 	function(error){
-						//show read errors 
-						console.log(error);
-						/*$("#reader").html5_qrcode_stop();*/
-						$('#waste_bin_status').html("Scan Error!!!");
-					}, function(videoError){
-						//the video stream could be opened
-						console.log(videoError);
-						$("#reader").html5_qrcode_stop();
-						$('#waste_bin_status').html("Video Error!!");
-					}
-				);
-			});
-
-			//sends dummy waste data to server
-			$('#send_waste').click(function(){
-				var waste_info = '{"sgb_id":"'+sgb_id+'","waste_amt":1000,"qr_code":"'+qr_data+'"}';
-				$(this).attr("disabled",true);
-				$('#waste_bin_status').html("Closed");
-				$.post( 
-		 		 		"{% url 'mqtt-ajax-waste' %}",
-		 		 		{ 
-		 		 			waste_meta_data: waste_info,
-		 		 			csrfmiddlewaretoken:'{{ csrf_token }}'
-		 		 		 },
-		 		 		function(res,status){
-		 		 			$("#server_response").html(res);
-			 		 		console.log(res);
-		 		 		});
-			});
-		});
-	</script>
-	
+	<script type="text/javascript"></script>	
 </body>
 </html>
 </body>
