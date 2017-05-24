@@ -6,6 +6,7 @@
 	<title>Waste Bin</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+	<script src="https://cdn.rawgit.com/wilq32/jqueryrotate/master/jQueryRotate.js"></script> 
 	{% load static %}
 	<script type="text/javascript" src="{% static 'js/jsqrcode-combined.min.js' %}"></script>
 	<script type="text/javascript" src="{% static 'js/html5-qrcode.min.js' %}"></script>
@@ -83,9 +84,10 @@
 	      </div>
 	      <div class="well">
 	        <button id="send_waste" class="btn btn-danger" disabled>Send Waste</button>
-	        <br>
-	        <button id="collect_waste" class="btn btn-danger" disabled>Collect Waste</button>
+	        <!-- <br>
+	        <button id="collect_waste" class="btn btn-danger" disabled>Collect Waste</button> -->
 	      </div>
+	      
 	    </div>
 	    <div class="col-sm-8 text-left">       
 	      <div>
@@ -94,7 +96,9 @@
 	      <hr>
 	      <div class="row">
     		<div class="col" align="center">
-	      		<img src="{% static 'qr_reader/img/Recycle_Bin_Full.png' %}" alt="">
+	      		<!-- <img src="{% static 'qr_reader/img/Recycle_Bin_Full.png' %}" alt=""> -->
+	      		<img id="bin_lid" src="{% static 'qr_reader/img/bin_lid_small.png' %}" alt=""><br>
+				<img id="bin_body" src="{% static 'qr_reader/img/bin_body_small.png' %}" style="padding-left: 10px" alt="">	
 	      		<br>
 	      		<button type="button" class="btn btn-primary" id="qr_scan">Scan QR</button>
     		</div>
@@ -114,6 +118,12 @@
 	      <div class="well">
 	        <p id="server_response" class="text-danger">No interaction!</p>
 	      </div>
+	      <div class="well">
+	        <p><span>Waste: </span><span id="current_state"></span><span> gm</span></p>
+	        <p><span>Capacity: </span><span id="max_capacity"></span><span> gm</span></p>
+	        <p><span>% Used: </span><span id="percent_used"></span><span> %</span></p>
+	        <p><span>Rate: </span><span id="rate"></span></p>
+	      </div>
 	    </div>
 	  </div>
 	</div>
@@ -121,8 +131,18 @@
 		$(document).ready(function(){
 			var qr_data;
 			var sgb_id;
+			var waste_bin_info;
 			$.getJSON("{% static 'data.json' %}",{async : false},function(data){
 				sgb_id = data.sgb_id;
+				console.log(sgb_id);
+				$.get("http://localhost:3000/api/info/"+sgb_id,
+		 		 		function(waste_bin_data){
+		 		 			waste_bin_info = waste_bin_data;
+		 		 			$("#current_state").html(waste_bin_data.current_waste_amt);
+		 		 			$("#max_capacity").html(waste_bin_data.total_capacity);
+		 		 			$("#percent_used").html(waste_bin_data.percent_used);
+		 		 			$("#rate").html(waste_bin_data.rate);	
+		 	 		});
 			});
 			
 			$('#qr_scan').click(function(){
@@ -143,6 +163,11 @@
 				 		 			//if response is true, open the SGB and activate the send 
 				 		 			if(mqtt_response === "true"){
 				 		 				$('#waste_bin_status').html("Open");
+				 		 				$("#bin_lid").rotate({
+											angle:0, 
+									      	animateTo:90, 
+									      	center: ["150px", "100px"]
+										});
 				 		 				$("#send_waste").attr("disabled",false);
 				 		 			}
 				 		 		});
@@ -154,21 +179,27 @@
 						//show read errors 
 						console.log(error);
 						/*$("#reader").html5_qrcode_stop();*/
-						$('#waste_bin_status').html("Scan Error!!!");
+						//$('#waste_bin_status').html("Scan Error!!!");
 					}, function(videoError){
 						//the video stream could be opened
 						console.log(videoError);
 						$("#reader").html5_qrcode_stop();
-						$('#waste_bin_status').html("Video Error!!");
+						//$('#waste_bin_status').html("Video Error!!");
 					}
 				);
 			});
 
 			//sends dummy waste data to server
 			$('#send_waste').click(function(){
-				var waste_info = '{"sgb_id":"'+sgb_id+'","waste_amt":1000,"qr_code":"'+qr_data+'"}';
+				waste_amt = 1000 + waste_bin_info.current_waste_amt;
+				var waste_info = '{"sgb_id":"'+sgb_id+'","waste_amt":'+waste_amt+',"qr_code":"'+qr_data+'"}';
 				$(this).attr("disabled",true);
 				$('#waste_bin_status').html("Closed");
+				$("#bin_lid").rotate({
+					angle:0, 
+			      	animateTo:0, 
+			      	center: ["150px", "100px"]
+				});
 				$.post( 
 		 		 		"{% url 'mqtt-ajax-waste' %}",
 		 		 		{ 
@@ -180,6 +211,7 @@
 			 		 		console.log(res);
 		 		 		});
 			});
+
 		});
 	</script>
 	

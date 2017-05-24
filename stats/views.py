@@ -7,8 +7,6 @@ import json
 
 def index(request):
 	# make an api call here
-	
-	
 	try:
 	 	response = urllib2.urlopen('http://localhost:3000/api/account')
 	 	data = json.load(response)

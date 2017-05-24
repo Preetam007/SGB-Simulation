@@ -1,0 +1,139 @@
+{% extends "dashboard/include/base.html" %}        
+        {% block content %}
+        {% load static %}
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="header">
+                                <h4 class="title">SGB Statistics</h4>
+                                <p class="category">Current waste amount</p>
+                            </div>
+                            <div class="content">
+                                <div id="chartPreferences"></div>
+
+                                <div class="footer">
+                                    <hr>
+                                    <div class="stats">
+                                        <i class="fa fa-clock-o"></i> Campaign sent 2 days ago
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="header">
+                                <h4 class="title">SGB Sim</h4>
+                                <p class="category">with qr scanner</p>
+                            </div>
+                            <div class="content">
+                                <div class="col" align="center">
+                                    <img id="bin_lid" src="{% static 'qr_reader/img/bin_lid_small.png' %}" alt=""><br>
+                                    <img id="bin_body" src="{% static 'qr_reader/img/bin_body_small.png' %}" style="padding-left: 10px" alt=""> 
+                                    <br>
+                                    <button type="button" class="btn btn-primary" id="qr_scan">Scan QR</button>
+                                </div>
+                                <div class="footer">
+                                    <hr>
+                                     <div class="legend">
+                                        <div class="col-md-4">
+                                            <b>Status: </b><p id="waste_bin_status" class="text-danger">Closed</p>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <b>Server Message: </b><p id="server_response" class="text-danger">No response</p>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <button id="send_waste" class="btn btn-danger" disabled>Send Waste</button>
+                                        </div>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card ">
+                            <div class="header">
+                                <h4 class="title">QR Display</h4>
+                                <p class="category">Shows the camera view</p>
+                            </div>
+                            <div class="content">
+                                <div id="reader" class="ct-chart"></div>
+
+                                <div class="footer">
+                                    <div class="legend">
+                                        <!-- <i class="fa fa-circle text-info"></i> Tesla Model S
+                                        <i class="fa fa-circle text-danger"></i> BMW 5 Series -->
+                                    </div>
+                                    <hr>
+                                    <div class="stats">
+                                        <i class="fa fa-check"></i> Data information certified
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card ">
+                            <div class="header">
+                                <h4 class="title">Accounts</h4>
+                                <p class="category">Balance information in TheBank</p>
+                            </div>
+                            <div class="content">
+                                <div class="table-full-width">
+                                    <table class="table">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" value="" data-toggle="checkbox">
+                                                    </label>
+                                                </td>
+                                                <td><b>Test Account</b>: {{ shubi.account }} <b>Balance (ETH)</b>: {{ shubi.ETH }}</td>
+
+                                                <td class="td-actions text-right">
+                                                    <!-- <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-xs">
+                                                        <i class="fa fa-edit"></i>
+                                                    </button> -->
+                                                    <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs">
+                                                        <i class="fa fa-times"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" value="" data-toggle="checkbox" checked="">
+                                                    </label>
+                                                </td>
+                                                <td><b>ComDAO Account</b>: {{ comdao.account }} <b>Balance (ETH)</b>: {{ comdao.ETH }}</td>
+                                                <td class="td-actions text-right">
+                                                    <!-- <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-xs">
+                                                        <i class="fa fa-edit"></i>
+                                                    </button> -->
+                                                    <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs">
+                                                        <i class="fa fa-times"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="footer">
+                                    <hr>
+                                    <div class="stats">
+                                        <i class="fa fa-history"></i> Updated 3 minutes ago
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endblock %}

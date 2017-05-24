@@ -21,5 +21,6 @@ urlpatterns = [
     url(r'^', include('qr_reader.urls')),
     url(r'^events', include('events.urls')),
     url(r'^maps/', include('maps.urls')),
-    url(r'^stats/', include('stats.urls'))
+    url(r'^stats/', include('stats.urls')),
+    url(r'^dashboard/', include('dashboard.urls'))
 ]

@@ -25,6 +25,9 @@ def qr_reader_sabin(request):
 	# psabin is supposed to edit here
 	return render(request,"qr_reader/index-sabin.html")
 
+def custom_waste_bin(request):
+	return render(request,"qr_reader/custom_bin.html")	
+
 def mqtt_ajax_authenticate(request):
 	decoded_qr =  request.POST.get("code","error getting code")
 

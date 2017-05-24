@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'recycler',
     'stats',
     'collectors',
+    'dashboard',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

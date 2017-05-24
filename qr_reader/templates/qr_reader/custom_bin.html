@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Custom Bin with Rotation</title>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+	<script src="https://cdn.rawgit.com/wilq32/jqueryrotate/master/jQueryRotate.js"></script> 
+	{% load static %}
+</head>
+<body>
+	<br><br><br>
+	<div id="bin">
+		<img id="bin_lid" src="{% static 'qr_reader/img/bin_lid_small.png' %}" alt=""><br>
+		<img id="bin_body" src="{% static 'qr_reader/img/bin_body_small.png' %}" style="padding-left: 10px" alt="">	
+	</div>
+	<div id="buttons">
+		<button id="open">open</button>
+		<button id="close">close</button>
+	</div>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#open").click(function(){
+				$("#bin_lid").rotate({
+	                angle:0, 
+	                animateTo:90, 
+	                center: ["150px", "100px"]
+            	});
+					
+			});
+			$("#close").click(function(){
+	            $("#bin_lid").rotate({
+	                angle:0, 
+	                animateTo:0, 
+	                center: ["150px", "100px"]
+	            });
+	        });
+		});
+	</script>
+</body>
+</html>
